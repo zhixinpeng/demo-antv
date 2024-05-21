@@ -47,7 +47,7 @@ onMounted(() => {
   })
   document.getElementById('stencil')!.appendChild(stencil.container)
 
-  // #region 初始化图形
+  // 注册节点连接点
   const ports = {
     groups: {
       top: {
@@ -127,6 +127,7 @@ onMounted(() => {
     ],
   }
 
+  // 注册节点图形
   Graph.registerNode(
     'custom-rect',
     {
@@ -149,6 +150,7 @@ onMounted(() => {
     true,
   )
 
+  // 创建预置节点
   const r1 = graph.createNode({
     shape: 'custom-rect',
     label: '开始',
@@ -181,6 +183,7 @@ onMounted(() => {
     },
   })
 
+  // 左侧面板加载预置节点
   stencil.load([r1, r2, r3, r4], 'group1')
 
   // 控制连接桩显示/隐藏
@@ -189,6 +192,7 @@ onMounted(() => {
       ports[i].style.visibility = show ? 'visible' : 'hidden'
     }
   }
+  // 画布注册一些事件
   graph.on('node:mouseenter', () => {
     const container = document.getElementById('graph-container')!
     const ports = container.querySelectorAll('.x6-port-body') as NodeListOf<SVGElement>
@@ -206,6 +210,9 @@ onMounted(() => {
   <div id="container">
     <div id="stencil"></div>
     <div id="graph-container"></div>
+    <div id="nodes">
+      <h1>选中节点信息</h1>
+    </div>
   </div>
 </template>
 
@@ -226,5 +233,15 @@ onMounted(() => {
 #graph-container {
   flex: 1;
   height: 100%;
+}
+
+#nodes {
+  width: 300px;
+  height: 100%;
+  position: relative;
+  border-left: 1px solid #dfe3e8;
+  background-color: #F2F7FA;
+  color: black;
+  text-align: center;
 }
 </style>
