@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Graph, Shape } from '@antv/x6'
+import { Cell, Graph, Shape } from '@antv/x6'
 import { Stencil } from '@antv/x6-plugin-stencil'
 import { Transform } from '@antv/x6-plugin-transform'
 import { Selection } from '@antv/x6-plugin-selection'
@@ -7,11 +7,20 @@ import { Snapline } from '@antv/x6-plugin-snapline'
 import { Keyboard } from '@antv/x6-plugin-keyboard'
 import { Clipboard } from '@antv/x6-plugin-clipboard'
 import { History } from '@antv/x6-plugin-history'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+
+const selectedCell = ref<Cell>()
+
+let graph: Graph
 
 onMounted(() => {
+  initGraph()
+})
+
+// 画布初始化
+const initGraph = () => {
   // 画布
-  const graph: Graph = new Graph({
+  graph = new Graph({
     container: document.getElementById('graph-container')!,
     background: {
       color: '#F2F7FA',
@@ -246,6 +255,7 @@ onMounted(() => {
     const ports = container.querySelectorAll('.x6-port-body') as NodeListOf<SVGElement>
     showPorts(ports, false)
   })
+  bindGraphEvent()
 
   // 画布添加各种插件能力
   graph
@@ -325,7 +335,17 @@ onMounted(() => {
       graph.zoom(-0.1)
     }
   })
-})
+}
+
+// 绑定画布事件，用来实现业务功能
+// https://x6.antv.antgroup.com/tutorial/basic/events#%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6
+const bindGraphEvent = () => {
+  // 点击节点
+  graph.on('cell:click', ({ e, x, y, cell, view }) => {
+    console.log(e, x, y, cell, view)
+    selectedCell.value = cell
+  })
+}
 </script>
 
 <template>
@@ -334,6 +354,7 @@ onMounted(() => {
     <div id="graph-container"></div>
     <div id="nodes">
       <h1>选中节点信息</h1>
+      <div>{{selectedCell}}</div>
     </div>
   </div>
 </template>
