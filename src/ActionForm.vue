@@ -1,10 +1,5 @@
 <template>
-  <a-form
-    ref="formRef"
-    :model="form"
-    :label-col-props="{ span: 8 }"
-    :wrapper-col-props="{ span: 16 }"
-  >
+  <a-form :model="form" :label-col-props="{ span: 8 }" :wrapper-col-props="{ span: 16 }">
     <a-row>
       <a-col :span="24">
         <a-form-item name="nodeName" label="动作名称">
@@ -32,8 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { FormInstance } from 'ant-design-vue'
-import { withDefaults, defineProps, defineEmits, ref } from 'vue'
+import { withDefaults, defineProps, defineEmits } from 'vue'
 
 interface IForm {
   type: string
@@ -41,8 +35,6 @@ interface IForm {
   deviceType?: number
   device?: number
 }
-
-const formRef = ref<FormInstance>()
 
 const form = withDefaults(defineProps<IForm>(), {
   type: 'action',
