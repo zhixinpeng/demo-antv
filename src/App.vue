@@ -349,11 +349,6 @@ const initGraph = () => {
 // 绑定画布事件，用来实现业务功能
 // https://x6.antv.antgroup.com/tutorial/basic/events#%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6
 const bindGraphEvent = () => {
-  // 点击节点
-  // graph.on('cell:click', ({ e, x, y, cell, view }) => {
-  //   console.log(e, x, y, cell, view)
-  //   selectedCell.value = cell
-  // })
   graph.on('node:click', (e) => {
     const { node } = e
     selectedNode.value = node
