@@ -8,6 +8,8 @@ import { Keyboard } from '@antv/x6-plugin-keyboard'
 import { Clipboard } from '@antv/x6-plugin-clipboard'
 import { History } from '@antv/x6-plugin-history'
 import { computed, onMounted, ref } from 'vue'
+import ActionForm from './ActionFrom.vue'
+import ApprovalForm from './ApprovalFrom.vue'
 
 const selectedNode = ref<Node<Node.Properties>>()
 const selectedData = computed(() => selectedNode.value?.data || {})
@@ -218,37 +220,16 @@ const initGraph = () => {
     shape: 'custom-rect',
     label: '动作节点',
     data: {
-      name: '动作节点',
-      actions: [
-        {
-          type: 'input',
-          label: '节点名称',
-        },
-        {
-          type: 'select',
-          label: '审批人',
-          options: [
-            {
-              name: '单选',
-              value: 1,
-            },
-            {
-              name: '多选',
-              value: 2,
-            },
-          ],
-        },
-        {
-          type: 'radio',
-          label: '通知方式',
-        },
-      ],
+      type: 'action',
     },
   })
 
   const r3 = graph.createNode({
     shape: 'custom-rect',
     label: '审批节点',
+    data: {
+      type: 'approval',
+    },
   })
 
   const r4 = graph.createNode({
@@ -385,14 +366,15 @@ const bindGraphEvent = () => {
     <div id="stencil"></div>
     <div id="graph-container"></div>
     <div id="nodes">
-      <h1>选中节点信息</h1>
-      <div>{{ selectedData.name }}</div>
-      <div v-for="action in selectedData.actions">
-        <span>{{ action.label }}</span>
-        <input v-if="action.type === 'input'" type="text" />
-        <select v-if="action.type === 'select'"></select>
-        <input v-if="action.type === 'radio'" type="radio" />
+      <div class="content">
+        <template v-if="selectedData.type === 'action'">
+          <ActionForm />
+        </template>
+        <template v-if="selectedData.type === 'approval'">
+          <ApprovalForm />
+        </template>
       </div>
+      <a-button type="primary">导出数据</a-button>
     </div>
   </div>
 </template>
@@ -424,5 +406,13 @@ const bindGraphEvent = () => {
   background-color: #f2f7fa;
   color: black;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 20px;
+}
+
+.content {
+  width: 100%;
+  flex: 1;
 }
 </style>

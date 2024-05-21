@@ -17,6 +17,7 @@
     "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-plugin-stencil": "^2.1.5",
     "@antv/x6-plugin-transform": "^2.1.8",
+    "ant-design-vue": "4.x",
     "vue": "^3.4.21"
   },
   "devDependencies": {
