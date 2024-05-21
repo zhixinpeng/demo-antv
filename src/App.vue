@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { Graph } from '@antv/x6'
+import { Graph, Shape } from '@antv/x6'
 import { Stencil } from '@antv/x6-plugin-stencil'
+import { Transform } from '@antv/x6-plugin-transform'
+import { Selection } from '@antv/x6-plugin-selection'
+import { Snapline } from '@antv/x6-plugin-snapline'
+import { Keyboard } from '@antv/x6-plugin-keyboard'
+import { Clipboard } from '@antv/x6-plugin-clipboard'
+import { History } from '@antv/x6-plugin-history'
 import { onMounted } from 'vue'
 
 onMounted(() => {
@@ -31,6 +37,42 @@ onMounted(() => {
       modifiers: 'ctrl',
       minScale: 0.5,
       maxScale: 3,
+    },
+    connecting: {
+      router: 'manhattan',
+      connector: {
+        name: 'rounded',
+        args: {
+          radius: 8,
+        },
+      },
+      anchor: 'center',
+      connectionPoint: 'anchor',
+      allowBlank: false,
+      snap: {
+        radius: 20,
+      },
+      // 连接线样式
+      createEdge() {
+        return new Shape.Edge({
+          attrs: {
+            line: {
+              stroke: '#A2B1C3',
+              strokeWidth: 2,
+              targetMarker: {
+                name: 'block',
+                width: 12,
+                height: 8,
+              },
+            },
+          },
+          zIndex: 0,
+        })
+      },
+      // 验证是否连接上节点
+      validateConnection({ targetMagnet }) {
+        return !!targetMagnet
+      },
     },
   })
 
@@ -192,6 +234,7 @@ onMounted(() => {
       ports[i].style.visibility = show ? 'visible' : 'hidden'
     }
   }
+
   // 画布注册一些事件
   graph.on('node:mouseenter', () => {
     const container = document.getElementById('graph-container')!
@@ -202,6 +245,85 @@ onMounted(() => {
     const container = document.getElementById('graph-container')!
     const ports = container.querySelectorAll('.x6-port-body') as NodeListOf<SVGElement>
     showPorts(ports, false)
+  })
+
+  // 画布添加各种插件能力
+  graph
+    .use(
+      new Transform({
+        resizing: false,
+        rotating: false,
+      }),
+    )
+    .use(
+      new Selection({
+        rubberband: true,
+        showNodeSelectionBox: true,
+      }),
+    )
+    .use(new Snapline())
+    .use(new Keyboard())
+    .use(new Clipboard())
+    .use(new History())
+
+  // 注册各种键盘快捷键
+  graph.bindKey(['meta+c', 'ctrl+c'], () => {
+    const cells = graph.getSelectedCells()
+    if (cells.length) {
+      graph.copy(cells)
+    }
+    return false
+  })
+  graph.bindKey(['meta+x', 'ctrl+x'], () => {
+    const cells = graph.getSelectedCells()
+    if (cells.length) {
+      graph.cut(cells)
+    }
+    return false
+  })
+  graph.bindKey(['meta+v', 'ctrl+v'], () => {
+    if (!graph.isClipboardEmpty()) {
+      const cells = graph.paste({ offset: 32 })
+      graph.cleanSelection()
+      graph.select(cells)
+    }
+    return false
+  })
+  graph.bindKey(['meta+z', 'ctrl+z'], () => {
+    if (graph.canUndo()) {
+      graph.undo()
+    }
+    return false
+  })
+  graph.bindKey(['meta+shift+z', 'ctrl+shift+z'], () => {
+    if (graph.canRedo()) {
+      graph.redo()
+    }
+    return false
+  })
+  graph.bindKey(['meta+a', 'ctrl+a'], () => {
+    const nodes = graph.getNodes()
+    if (nodes) {
+      graph.select(nodes)
+    }
+  })
+  graph.bindKey('backspace', () => {
+    const cells = graph.getSelectedCells()
+    if (cells.length) {
+      graph.removeCells(cells)
+    }
+  })
+  graph.bindKey(['ctrl+1', 'meta+1'], () => {
+    const zoom = graph.zoom()
+    if (zoom < 1.5) {
+      graph.zoom(0.1)
+    }
+  })
+  graph.bindKey(['ctrl+2', 'meta+2'], () => {
+    const zoom = graph.zoom()
+    if (zoom > 0.5) {
+      graph.zoom(-0.1)
+    }
   })
 })
 </script>
@@ -240,7 +362,7 @@ onMounted(() => {
   height: 100%;
   position: relative;
   border-left: 1px solid #dfe3e8;
-  background-color: #F2F7FA;
+  background-color: #f2f7fa;
   color: black;
   text-align: center;
 }
