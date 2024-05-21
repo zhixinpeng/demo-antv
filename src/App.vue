@@ -7,12 +7,12 @@ import { Snapline } from '@antv/x6-plugin-snapline'
 import { Keyboard } from '@antv/x6-plugin-keyboard'
 import { Clipboard } from '@antv/x6-plugin-clipboard'
 import { History } from '@antv/x6-plugin-history'
-import { computed, onMounted, ref } from 'vue'
-import ActionForm from './ActionFrom.vue'
-import ApprovalForm from './ApprovalFrom.vue'
+import { onMounted, ref } from 'vue'
+import ActionForm from './ActionForm.vue'
+import ApprovalForm from './ApprovalForm.vue'
 
 const selectedNode = ref<Node<Node.Properties>>()
-const selectedData = computed(() => selectedNode.value?.data || {})
+const selectedNodeData = ref<any>()
 
 let graph: Graph
 
@@ -221,6 +221,9 @@ const initGraph = () => {
     label: '动作节点',
     data: {
       type: 'action',
+      nodeName: '动作',
+      deviceType: 1,
+      device: 1,
     },
   })
 
@@ -349,10 +352,21 @@ const initGraph = () => {
 // 绑定画布事件，用来实现业务功能
 // https://x6.antv.antgroup.com/tutorial/basic/events#%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6
 const bindGraphEvent = () => {
-  graph.on('node:click', (e) => {
+  graph.on('node:selected', (e) => {
     const { node } = e
     selectedNode.value = node
+    selectedNodeData.value = node.data
   })
+}
+
+const handleFormChange = (form: any) => {
+  selectedNode.value?.updateData(form)
+}
+
+const exportJson = () => {
+  console.log(graph.toJSON())
+  // 导出的JSON存到服务端，让服务端从这里面拿自己要的数据
+  // 回显时，服务端再下发这份JSON给前端，前端用 graph.fromJSON(json) 重新显示
 }
 </script>
 
@@ -362,14 +376,20 @@ const bindGraphEvent = () => {
     <div id="graph-container"></div>
     <div id="nodes">
       <div class="content">
-        <template v-if="selectedData.type === 'action'">
-          <ActionForm />
-        </template>
-        <template v-if="selectedData.type === 'approval'">
-          <ApprovalForm />
+        <template v-if="selectedNodeData">
+          <template v-if="selectedNodeData.type === 'action'">
+            <ActionForm
+              :key="selectedNode?.id"
+              v-bind="selectedNodeData"
+              @change="handleFormChange"
+            />
+          </template>
+          <template v-if="selectedNodeData.type === 'approval'">
+            <ApprovalForm :key="selectedNode?.id" />
+          </template>
         </template>
       </div>
-      <a-button type="primary">导出数据</a-button>
+      <a-button type="primary" @click="exportJson">导出数据</a-button>
     </div>
   </div>
 </template>
