@@ -8,7 +8,7 @@
       </a-col>
       <a-col :span="24">
         <a-form-item label="设备类型">
-          <a-select :value="form.deviceType">
+          <a-select :value="form.deviceType" @change="handleDeviceTypeChange">
             <a-select-option :value="1">防火墙</a-select-option>
             <a-select-option :value="2">ISP</a-select-option>
           </a-select>
@@ -16,7 +16,7 @@
       </a-col>
       <a-col :span="24">
         <a-form-item label="执行设备">
-          <a-select :value="form.device">
+          <a-select :value="form.device" @change="handleDeviceChange">
             <a-select-option :value="1">研发防火墙</a-select-option>
             <a-select-option :value="2">公司防火墙</a-select-option>
           </a-select>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults, defineProps, defineEmits } from 'vue'
+import { withDefaults } from 'vue'
 
 interface IForm {
   type: string
@@ -47,6 +47,14 @@ const emit = defineEmits(['change'])
 
 const handleNodeNameChange = (e: any) => {
   emit('change', { ...form, nodeName: e.target.value })
+}
+
+const handleDeviceTypeChange = (e: number) => {
+  emit('change', { ...form, deviceType: e })
+}
+
+const handleDeviceChange = (e: number) => {
+  emit('change', { ...form, device: e })
 }
 </script>
 

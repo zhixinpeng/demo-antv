@@ -361,6 +361,7 @@ const bindGraphEvent = () => {
 
 const handleFormChange = (form: any) => {
   selectedNode.value?.updateData(form)
+  selectedNodeData.value = form
 }
 
 const exportJson = () => {
