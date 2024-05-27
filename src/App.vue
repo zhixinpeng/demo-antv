@@ -366,8 +366,16 @@ const handleFormChange = (form: any) => {
 
 const exportJson = () => {
   console.log(graph.toJSON())
+  localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
   // 导出的JSON存到服务端，让服务端从这里面拿自己要的数据
   // 回显时，服务端再下发这份JSON给前端，前端用 graph.fromJSON(json) 重新显示
+}
+
+const importJson = () => {
+  const json = localStorage.getItem('graph')
+  if (json) {
+    graph.fromJSON(JSON.parse(json))
+  }
 }
 </script>
 
@@ -390,7 +398,10 @@ const exportJson = () => {
           </template>
         </template>
       </div>
-      <a-button type="primary" @click="exportJson">导出数据</a-button>
+      <a-space-compact block direction="vertical">
+        <a-button @click="importJson">导入数据</a-button>
+        <a-button type="primary" @click="exportJson">导出数据</a-button>
+      </a-space-compact>
     </div>
   </div>
 </template>
