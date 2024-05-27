@@ -46,16 +46,16 @@ const form = withDefaults(defineProps<IForm>(), {
 
 const emit = defineEmits(['change'])
 
-const handleNodeNameChange = (e: any) => {
-  emit('change', { ...form, nodeName: e.target.value })
+const handleNodeNameChange = (value: any) => {
+  emit('change', { ...form, nodeName: value })
 }
 
-const handleNameChange = (e: number) => {
-  emit('change', { ...form, name: e })
+const handleNameChange = (value: any) => {
+  emit('change', { ...form, name: value })
 }
 
-const handleStatusChange = (e: any) => {
-  emit('change', { ...form, status: e.target.value })
+const handleStatusChange = (value: any) => {
+  emit('change', { ...form, status: value })
 }
 </script>
 

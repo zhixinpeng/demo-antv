@@ -410,10 +410,10 @@ const importJson = () => {
           </template>
         </template>
       </div>
-      <a-flex vertical gap="small">
+      <div>
         <a-button @click="importJson">导入数据</a-button>
         <a-button type="primary" @click="exportJson">导出数据</a-button>
-      </a-flex>
+      </div>
     </div>
   </div>
 </template>
@@ -439,7 +439,6 @@ const importJson = () => {
 
 #nodes {
   width: 300px;
-  height: 100%;
   position: relative;
   border-left: 1px solid #dfe3e8;
   background-color: #f2f7fa;
