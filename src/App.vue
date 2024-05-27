@@ -221,7 +221,7 @@ const initGraph = () => {
     label: '动作节点',
     data: {
       type: 'action',
-      nodeName: '动作',
+      nodeName: '动作节点',
       deviceType: 1,
       device: 1,
     },
@@ -232,7 +232,7 @@ const initGraph = () => {
     label: '审批节点',
     data: {
       type: 'approval',
-      nodeName: '审批',
+      nodeName: '审批节点',
       name: 1,
       status: 1,
     },
@@ -365,6 +365,11 @@ const bindGraphEvent = () => {
 const handleFormChange = (form: any) => {
   selectedNode.value?.updateData(form)
   selectedNodeData.value = form
+  selectedNode.value?.setAttrs({
+    label: {
+      text: form.nodeName,
+    },
+  })
 }
 
 const exportJson = () => {
