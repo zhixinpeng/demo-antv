@@ -232,6 +232,9 @@ const initGraph = () => {
     label: '审批节点',
     data: {
       type: 'approval',
+      nodeName: '审批',
+      name: 1,
+      status: 1,
     },
   })
 
@@ -394,14 +397,18 @@ const importJson = () => {
             />
           </template>
           <template v-if="selectedNodeData.type === 'approval'">
-            <ApprovalForm :key="selectedNode?.id" />
+            <ApprovalForm
+              :key="selectedNode?.id"
+              v-bind="selectedNodeData"
+              @change="handleFormChange"
+            />
           </template>
         </template>
       </div>
-      <a-space-compact block direction="vertical">
+      <a-flex vertical gap="small">
         <a-button @click="importJson">导入数据</a-button>
         <a-button type="primary" @click="exportJson">导出数据</a-button>
-      </a-space-compact>
+      </a-flex>
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <a-form :model="form" :label-col-props="{ span: 8 }" :wrapper-col-props="{ span: 16 }">
     <a-row>
       <a-col :span="24">
-        <a-form-item name="nodeName" label="动作名称">
+        <a-form-item label="动作名称">
           <a-input :value="form.nodeName" @change="handleNodeNameChange" />
         </a-form-item>
       </a-col>
@@ -27,8 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults } from 'vue'
-
 interface IForm {
   type: string
   nodeName: string
