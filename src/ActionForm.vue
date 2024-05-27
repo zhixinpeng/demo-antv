@@ -3,22 +3,22 @@
     <a-row>
       <a-col :span="24">
         <a-form-item label="动作名称">
-          <a-input :value="form.nodeName" @change="handleNodeNameChange" />
+          <a-input :default-value="form.nodeName" @change="handleNodeNameChange" />
         </a-form-item>
       </a-col>
       <a-col :span="24">
         <a-form-item label="设备类型">
-          <a-select :value="form.deviceType" @change="handleDeviceTypeChange">
-            <a-select-option :value="1">防火墙</a-select-option>
-            <a-select-option :value="2">ISP</a-select-option>
+          <a-select :default-value="form.deviceType" @select="handleDeviceTypeChange">
+            <a-option :value="1">防火墙</a-option>
+            <a-option :value="2">ISP</a-option>
           </a-select>
         </a-form-item>
       </a-col>
       <a-col :span="24">
         <a-form-item label="执行设备">
-          <a-select :value="form.device" @change="handleDeviceChange">
-            <a-select-option :value="1">研发防火墙</a-select-option>
-            <a-select-option :value="2">公司防火墙</a-select-option>
+          <a-select :default-value="form.device" @select="handleDeviceChange">
+            <a-option :value="1">研发防火墙</a-option>
+            <a-option :value="2">公司防火墙</a-option>
           </a-select>
         </a-form-item>
       </a-col>

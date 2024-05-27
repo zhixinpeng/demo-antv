@@ -3,20 +3,20 @@
     <a-row>
       <a-col :span="24">
         <a-form-item label="节点名称">
-          <a-input :value="form.nodeName" @change="handleNodeNameChange" />
+          <a-input :default-value="form.nodeName" @change="handleNodeNameChange" />
         </a-form-item>
       </a-col>
       <a-col :span="24">
         <a-form-item label="审批人">
-          <a-select :value="form.name" @change="handleNameChange">
-            <a-select-option :value="1">张三</a-select-option>
-            <a-select-option :value="2">李四</a-select-option>
+          <a-select :default-value="form.name" @select="handleNameChange">
+            <a-option :value="1">张三</a-option>
+            <a-option :value="2">李四</a-option>
           </a-select>
         </a-form-item>
       </a-col>
       <a-col :span="24">
         <a-form-item label="审批人">
-          <a-radio-group type="button" :value="form.status" @change="handleStatusChange">
+          <a-radio-group type="button" :default-value="form.status" @change="handleStatusChange">
             <a-radio :value="1">邮件</a-radio>
             <a-radio :value="2">短信</a-radio>
             <a-radio :value="3">工单</a-radio>
